@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
             children: <Widget>[
               ElapsedTimeContainer(),
               SizedBox(height: 40),
-              NomukiButton(),
+              NomukiButtonContainer(),
             ],
           ),
         ),
@@ -39,7 +39,7 @@ class ElapsedTimeContainer extends StatelessWidget {
       children: <Widget>[
         ElapsedTimeDescText('最後に飲んでから'),
         ElapsedTime(),
-        SizedBox(height: 10),
+        SizedBox(height: 8),
         ElapsedTimeDescText('が経過しています'),
       ],
     );
@@ -119,6 +119,25 @@ class ElapsedTimeUnit extends StatelessWidget {
   }
 }
 
+class NomukiButtonContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        NomukiButton(),
+        SizedBox(height: 24),
+        Icon(
+          Icons.arrow_upward_rounded,
+          color: Theme.of(context).primaryColor,
+        ),
+        SizedBox(height: 8),
+        NomukiButtonDesc()
+      ],
+    );
+  }
+}
+
 class NomukiButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -138,6 +157,20 @@ class NomukiButton extends StatelessWidget {
           color: Colors.white,
           onPressed: () {},
         ),
+      ),
+    );
+  }
+}
+
+class NomukiButtonDesc extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      '飲む前にタップ',
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 32,
+        color: Theme.of(context).primaryColor,
       ),
     );
   }
