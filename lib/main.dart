@@ -17,8 +17,103 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         appBar: Header(),
         body: Center(
-          child: NomukiButton()
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElapsedTimeContainer(),
+              SizedBox(height: 40),
+              NomukiButton(),
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class ElapsedTimeContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElapsedTimeDescText('最後に飲んでから'),
+        ElapsedTime(),
+        SizedBox(height: 10),
+        ElapsedTimeDescText('が経過しています'),
+      ],
+    );
+  }
+}
+
+class ElapsedTimeDescText extends StatelessWidget {
+  final String text;
+  ElapsedTimeDescText(this.text);
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 20,
+        color: Theme.of(context).primaryColor,
+      )
+    );
+  }
+}
+
+class ElapsedTime extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: <Widget>[
+        ElapsedTimeValue('00'),
+        ElapsedTimeUnit('日'),
+        SizedBox(width: 8),
+        ElapsedTimeValue('00'),
+        ElapsedTimeUnit('時'),
+        SizedBox(width: 8),
+        ElapsedTimeValue('00'),
+        ElapsedTimeUnit('分'),
+      ]
+    );
+  }
+}
+
+class ElapsedTimeValue extends StatelessWidget {
+  final String value;
+  ElapsedTimeValue(this.value);
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      value,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 50,
+        color: Theme.of(context).primaryColor,
+      ),
+      strutStyle: StrutStyle(
+        fontSize: 50.0,
+      ),
+    );
+  }
+}
+
+class ElapsedTimeUnit extends StatelessWidget {
+  final String unit;
+  ElapsedTimeUnit(this.unit);
+  Widget build(BuildContext context) {
+    return Text(
+      unit,
+      style: TextStyle(
+        fontWeight: FontWeight.bold,
+        fontSize: 24,
+        color: Theme.of(context).primaryColor,
+      ),
+      strutStyle: StrutStyle(
+        fontSize: 60.0,
       ),
     );
   }
