@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: '飲む気スイッチ',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.amber,
+        accentColor: Colors.black87,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ElapsedTimeContainer(),
+              NumberOfTimesContainer(),
               SizedBox(height: 40),
               NomukiButtonContainer(),
             ],
@@ -31,89 +32,83 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class ElapsedTimeContainer extends StatelessWidget {
+class NumberOfTimesContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        ElapsedTimeDescText('最後に飲んでから'),
-        ElapsedTime(),
-        SizedBox(height: 8),
-        ElapsedTimeDescText('が経過しています'),
+        NumberOfTimes(),
+        SizedBox(height: 4),
+        NumberOfTimesDescText('飲んでいます'),
       ],
     );
   }
 }
 
-class ElapsedTimeDescText extends StatelessWidget {
+class NumberOfTimesDescText extends StatelessWidget {
   final String text;
-  ElapsedTimeDescText(this.text);
+  NumberOfTimesDescText(this.text);
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 20,
-        color: Theme.of(context).primaryColor,
+        fontSize: 24,
+        color: Theme.of(context).accentColor,
       )
     );
   }
 }
 
-class ElapsedTime extends StatelessWidget {
+class NumberOfTimes extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        ElapsedTimeValue('00'),
-        ElapsedTimeUnit('日'),
-        SizedBox(width: 8),
-        ElapsedTimeValue('00'),
-        ElapsedTimeUnit('時'),
-        SizedBox(width: 8),
-        ElapsedTimeValue('00'),
-        ElapsedTimeUnit('分'),
+        NumberOfTimesUnit('1週間以内に'),
+        NumberOfTimesValue('0'),
+        NumberOfTimesUnit('回'),
       ]
     );
   }
 }
 
-class ElapsedTimeValue extends StatelessWidget {
+class NumberOfTimesValue extends StatelessWidget {
   final String value;
-  ElapsedTimeValue(this.value);
+  NumberOfTimesValue(this.value);
   @override
   Widget build(BuildContext context) {
     return Text(
       value,
       style: TextStyle(
         fontWeight: FontWeight.bold,
-        fontSize: 50,
-        color: Theme.of(context).primaryColor,
+        fontSize: 60,
+        color: Theme.of(context).accentColor,
       ),
       strutStyle: StrutStyle(
-        fontSize: 50.0,
+        fontSize: 60.0,
       ),
     );
   }
 }
 
-class ElapsedTimeUnit extends StatelessWidget {
+class NumberOfTimesUnit extends StatelessWidget {
   final String unit;
-  ElapsedTimeUnit(this.unit);
+  NumberOfTimesUnit(this.unit);
   Widget build(BuildContext context) {
     return Text(
       unit,
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 24,
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).accentColor,
       ),
       strutStyle: StrutStyle(
-        fontSize: 60.0,
+        fontSize: 72.0,
       ),
     );
   }
@@ -126,12 +121,12 @@ class NomukiButtonContainer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         NomukiButton(),
-        SizedBox(height: 24),
+        SizedBox(height: 16),
         Icon(
           Icons.arrow_upward_rounded,
           color: Theme.of(context).primaryColor,
         ),
-        SizedBox(height: 8),
+        SizedBox(height: 4),
         NomukiButtonDesc()
       ],
     );
@@ -143,7 +138,7 @@ class NomukiButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Ink(
       decoration: const ShapeDecoration(
-        color: Colors.lightBlue,
+        color: Colors.amber,
         shape: CircleBorder(),
       ),
       child: SizedBox(
