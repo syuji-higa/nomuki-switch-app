@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import '../loacldb.dart';
 
-class HistoryPage extends StatelessWidget {
+class HistoryPage extends StatefulWidget {
+  @override
+  _HistoryPageState createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends State<HistoryPage> {
+  Future<List<DrinkTime>> _data;
+
   @override
   Widget build(context) {
+    _data = DrinkTime.getDrinkTimes();
+
     return FutureBuilder<List<DrinkTime>>(
-      future: _getDrinkTimes(),
+      future: _data,
       builder: (context, AsyncSnapshot<List<DrinkTime>> snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
@@ -13,7 +22,7 @@ class HistoryPage extends StatelessWidget {
               children: ListTile.divideTiles(
                 context: context,
                 tiles: snapshot.data.reversed.map((DrinkTime item) {
-                  return HistoryItem(item);
+                  return HistoryItem(item, _deleteDrinkTime);
                 }),
               ).toList(),
             ),
@@ -24,15 +33,30 @@ class HistoryPage extends StatelessWidget {
       },
     );
   }
+
+  void _deleteDrinkTime() {
+    _data = DrinkTime.getDrinkTimes();
+    setState(() {});
+  }
 }
 
 class HistoryItem extends StatelessWidget {
   final DrinkTime data;
-  HistoryItem(this.data);
+  final Function deleteDrinkTime;
+  HistoryItem(this.data, this.deleteDrinkTime);
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      leading: Icon(Icons.access_time_outlined),
       title: DrinkTimeText(data.createdAt.toString()),
+      trailing: IconButton(
+        icon: Icon(Icons.delete_forever_outlined),
+        onPressed: () {
+          DrinkTime.deleteDrinkTime(data.id);
+          deleteDrinkTime();
+        },
+      ),
     );
   }
 }
@@ -49,9 +73,4 @@ class DrinkTimeText extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<List<DrinkTime>> _getDrinkTimes() async {
-  List<DrinkTime> _drinkTimes = await DrinkTime.getDrinkTimes();
-  return _drinkTimes;
 }

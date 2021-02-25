@@ -67,4 +67,13 @@ class DrinkTime {
       createdAt: now,
     );
   }
+
+  static Future<void> deleteDrinkTime(int id) async {
+    final db = await database;
+    await db.delete(
+      'drink_time',
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
 }

@@ -47,9 +47,9 @@ class _TabBarState extends State<TabBar> {
       tabBar: CupertinoTabBar(
         items: items,
       ),
-      tabBuilder: (context, index) {
+      tabBuilder: (BuildContext context, int index) {
         return CupertinoTabView(
-          builder: (context) {
+          builder: (BuildContext context) {
             switch (index) {
               case 0:
                 return HomePage();
