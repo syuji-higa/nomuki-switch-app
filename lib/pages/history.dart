@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../loacldb.dart';
+import '../localdb.dart';
 
 class HistoryPage extends StatefulWidget {
   @override
@@ -64,6 +64,8 @@ class HistoryItem extends StatelessWidget {
 class DrinkTimeText extends StatelessWidget {
   final String unit;
   DrinkTimeText(this.unit);
+
+  @override
   Widget build(BuildContext context) {
     return Text(
       unit,
