@@ -36,6 +36,7 @@ class NumberOfTimesContainer extends StatelessWidget {
 class NumberOfTimesDescText extends StatelessWidget {
   final String text;
   NumberOfTimesDescText(this.text);
+  
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -67,6 +68,7 @@ class NumberOfTimes extends StatelessWidget {
 class NumberOfTimesValue extends StatelessWidget {
   final String value;
   NumberOfTimesValue(this.value);
+
   @override
   Widget build(BuildContext context) {
     return Text(
