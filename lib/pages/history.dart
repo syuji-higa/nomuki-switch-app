@@ -22,7 +22,7 @@ class _HistoryPageState extends State<HistoryPage> {
               children: ListTile.divideTiles(
                 context: context,
                 tiles: snapshot.data.reversed.map((DrinkTime item) {
-                  return HistoryItem(item, _deleteDrinkTime);
+                  return HistoryItem(item, _updateDrinkTime);
                 }),
               ).toList(),
             ),
@@ -34,7 +34,7 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
-  void _deleteDrinkTime() {
+  void _updateDrinkTime() {
     _data = DrinkTime.getDrinkTimes();
     setState(() {});
   }
@@ -42,8 +42,8 @@ class _HistoryPageState extends State<HistoryPage> {
 
 class HistoryItem extends StatelessWidget {
   final DrinkTime data;
-  final Function deleteDrinkTime;
-  HistoryItem(this.data, this.deleteDrinkTime);
+  final Function updateDrinkTime;
+  HistoryItem(this.data, this.updateDrinkTime);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class HistoryItem extends StatelessWidget {
         icon: Icon(Icons.delete_forever_outlined),
         onPressed: () {
           DrinkTime.deleteDrinkTime(data.id);
-          deleteDrinkTime();
+          updateDrinkTime();
         },
       ),
     );
