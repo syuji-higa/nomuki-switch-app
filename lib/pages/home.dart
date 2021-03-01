@@ -1,41 +1,86 @@
 import 'package:flutter/material.dart';
 import '../localdb.dart';
 
-class HomePage extends StatelessWidget {
+const int measurementPeriod = 1000 * 60 * 60 * 24 * 7; // 一週間
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Future<int> _drinkCount;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            NumberOfTimesContainer(),
-            SizedBox(height: 40),
-            NomukiButtonContainer(),
-          ],
-        ),
-      ),
-    );
+    _drinkCount = _getDrinkCount();
+
+    return FutureBuilder<int>(
+      future: _drinkCount,
+      builder: (context, AsyncSnapshot<int> snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  DrinkCountContainer(snapshot.data),
+                  SizedBox(height: 40),
+                  NomukiButtonContainer(_updateDrinkCount),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+      },
+    ); 
+  }
+
+  Future<int> _getDrinkCount() async {
+    List<DrinkTime> _drinkTimes = await DrinkTime.getDrinkTimes();
+
+    int _count = 0;
+    DateTime now = DateTime.now();
+    int startedTimestamp = now.millisecondsSinceEpoch - measurementPeriod;
+
+    for(DrinkTime data in _drinkTimes.reversed) {
+      int createdAtTimestamp = data.createdAt.millisecondsSinceEpoch;
+      if(startedTimestamp > createdAtTimestamp) {
+        break;
+      } 
+      _count++;
+    }
+    return _count;
+  }
+
+  void _updateDrinkCount() {
+    _drinkCount = _getDrinkCount();
+    setState(() {});
   }
 }
 
-class NumberOfTimesContainer extends StatelessWidget {
+class DrinkCountContainer extends StatelessWidget {
+  final int drinkCount;
+  DrinkCountContainer(this.drinkCount);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        NumberOfTimes(),
+        DrinkCount(drinkCount),
         SizedBox(height: 4),
-        NumberOfTimesDescText('飲んでいます'),
+        DrinkCountDescText('飲んでいます'),
       ],
     );
   }
 }
 
-class NumberOfTimesDescText extends StatelessWidget {
+class DrinkCountDescText extends StatelessWidget {
   final String text;
-  NumberOfTimesDescText(this.text);
+  DrinkCountDescText(this.text);
   
   @override
   Widget build(BuildContext context) {
@@ -50,29 +95,32 @@ class NumberOfTimesDescText extends StatelessWidget {
   }
 }
 
-class NumberOfTimes extends StatelessWidget {
+class DrinkCount extends StatelessWidget {
+  final int drinkCount;
+  DrinkCount(this.drinkCount);
+
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        NumberOfTimesUnit('1週間以内に'),
-        NumberOfTimesValue('0'),
-        NumberOfTimesUnit('回'),
+        DrinkCountUnit('1週間以内に'),
+        DrinkCountValue(drinkCount),
+        DrinkCountUnit('回'),
       ]
     );
   }
 }
 
-class NumberOfTimesValue extends StatelessWidget {
-  final String value;
-  NumberOfTimesValue(this.value);
+class DrinkCountValue extends StatelessWidget {
+  final int drinkCount;
+  DrinkCountValue(this.drinkCount);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      value,
+      drinkCount.toString(),
       style: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 60,
@@ -85,9 +133,9 @@ class NumberOfTimesValue extends StatelessWidget {
   }
 }
 
-class NumberOfTimesUnit extends StatelessWidget {
+class DrinkCountUnit extends StatelessWidget {
   final String unit;
-  NumberOfTimesUnit(this.unit);
+  DrinkCountUnit(this.unit);
   Widget build(BuildContext context) {
     return Text(
       unit,
@@ -104,12 +152,15 @@ class NumberOfTimesUnit extends StatelessWidget {
 }
 
 class NomukiButtonContainer extends StatelessWidget {
+  final Function updateDrinkCount;
+  NomukiButtonContainer(this.updateDrinkCount);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        NomukiButton(),
+        NomukiButton(updateDrinkCount),
         SizedBox(height: 16),
         Icon(
           Icons.arrow_upward_rounded,
@@ -123,6 +174,9 @@ class NomukiButtonContainer extends StatelessWidget {
 }
 
 class NomukiButton extends StatelessWidget {
+  final Function updateDrinkCount;
+  NomukiButton(this.updateDrinkCount);
+
   @override
   Widget build(BuildContext context) {
     return Ink(
@@ -139,7 +193,10 @@ class NomukiButton extends StatelessWidget {
             size: 40.0
           ),
           color: Colors.white,
-          onPressed: _addDrinkTime,
+          onPressed: () {
+            _addDrinkTime();
+            updateDrinkCount();
+          },
         ),
       ),
     );
