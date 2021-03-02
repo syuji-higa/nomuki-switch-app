@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../localdb.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -49,7 +50,7 @@ class HistoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(Icons.access_time_outlined),
-      title: DrinkTimeText(data.createdAt.toString()),
+      title: DrinkTimeText(data.createdAt),
       trailing: IconButton(
         icon: Icon(Icons.delete_forever_outlined),
         onPressed: () {
@@ -62,13 +63,13 @@ class HistoryItem extends StatelessWidget {
 }
 
 class DrinkTimeText extends StatelessWidget {
-  final String unit;
-  DrinkTimeText(this.unit);
+  final DateTime createdAt;
+  DrinkTimeText(this.createdAt);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      unit,
+      DateFormat('yyyy年MM月dd日 HH時mm分').format(createdAt),
       style: TextStyle(
         fontSize: 18,
         color: Theme.of(context).accentColor,
