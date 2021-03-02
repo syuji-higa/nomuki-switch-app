@@ -193,7 +193,13 @@ class NomukiButton extends StatelessWidget {
             size: 40.0
           ),
           color: Colors.white,
-          onPressed: () {
+          onPressed: () async {
+            await showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return StartedDialog();
+              },
+            );
             _addDrinkTime();
             updateDrinkCount();
           },
@@ -213,6 +219,22 @@ class NomukiButtonDesc extends StatelessWidget {
         fontSize: 32,
         color: Theme.of(context).primaryColor,
       ),
+    );
+  }
+}
+
+class StartedDialog extends StatelessWidget {
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('今日も楽しく飲みましょう！'),
+      actions: <Widget>[
+        RaisedButton(
+          color: Colors.amber,
+          textColor: Colors.white,
+          child: Text('OK'),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 }
