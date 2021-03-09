@@ -20,15 +20,23 @@ class _HomePageState extends State<HomePage> {
       builder: (context, AsyncSnapshot<int> snapshot) {
         if (snapshot.hasData) {
           return Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  DrinkCountContainer(snapshot.data),
-                  SizedBox(height: 40),
-                  NomukiButtonContainer(_updateDrinkCount),
-                ],
-              ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 40),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      DrinkCountContainer(snapshot.data),
+                      SizedBox(height: 40),
+                      NomukiButtonContainer(_updateDrinkCount),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 40),
+                HintButton(),
+              ],
             ),
           );
         } else {
@@ -197,7 +205,7 @@ class NomukiButton extends StatelessWidget {
             await showDialog(
               context: context,
               builder: (BuildContext context) {
-                return StartedDialog();
+                return Dialog('今日も楽しく飲みましょう！');
               },
             );
             _addDrinkTime();
@@ -223,10 +231,36 @@ class NomukiButtonDesc extends StatelessWidget {
   }
 }
 
-class StartedDialog extends StatelessWidget {
+class HintButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Ink(
+      child: IconButton(
+        icon: Icon(
+          Icons.help_outline_rounded,
+          size: 30.0,
+        ),
+        color: Colors.grey,
+        onPressed: () async {
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Dialog('その日の飲み始めだけでも、一杯飲むたびにでも、自分にあった方法でタップして、飲み過ぎていないかの目安にしましょう。');
+            },
+          );
+        },
+      ),
+    );
+  }
+}
+
+class Dialog extends StatelessWidget {
+  final String text;
+  Dialog(this.text);
+
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('今日も楽しく飲みましょう！'),
+      title: Text(text),
       actions: <Widget>[
         RaisedButton(
           color: Colors.amber,
