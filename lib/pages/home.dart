@@ -245,7 +245,7 @@ class HintButton extends StatelessWidget {
           await showDialog(
             context: context,
             builder: (BuildContext context) {
-              return Dialog('その日の飲み始めだけでも、一杯飲むたびにでも、自分にあった方法でタップして、飲み過ぎていないかの目安にしましょう。');
+              return Dialog('飲み始めにタップして気持ちを切り替えて楽しくお酒を飲みましょう。また、一週間以内に飲んだ回数を確認し、飲み過ぎていないかの目安にしましょう。');
             },
           );
         },
