@@ -53,11 +53,46 @@ class HistoryItem extends StatelessWidget {
       title: DrinkTimeText(data.createdAt),
       trailing: IconButton(
         icon: Icon(Icons.delete_forever_outlined),
-        onPressed: () {
-          DrinkTime.deleteDrinkTime(data.id);
-          updateDrinkTime();
+        onPressed: () async {
+          bool isDelete = await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              String createdAtText = DateFormat('yyyy年MM月dd日 HH時mm分').format(data.createdAt);
+              return Dialog('$createdAtText の履歴を削除しますか？');
+            },
+          );
+
+          if(isDelete) {
+            DrinkTime.deleteDrinkTime(data.id);
+            updateDrinkTime();
+          }
         },
       ),
+    );
+  }
+}
+
+class Dialog extends StatelessWidget {
+  final String text;
+  Dialog(this.text);
+
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(text),
+      actions: <Widget>[
+        RaisedButton(
+          color: Colors.amber,
+          textColor: Colors.white,
+          child: Text('いいえ'),
+          onPressed: () => Navigator.pop(context, false),
+        ),
+        RaisedButton(
+          color: Colors.amber,
+          textColor: Colors.white,
+          child: Text('はい'),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+      ],
     );
   }
 }
