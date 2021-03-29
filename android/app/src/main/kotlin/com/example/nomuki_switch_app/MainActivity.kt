@@ -1,4 +1,4 @@
-package com.example.nomuki_switch_app
+package com.higa.nomuki_switch_app
 
 import io.flutter.embedding.android.FlutterActivity
 
