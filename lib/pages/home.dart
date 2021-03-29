@@ -265,7 +265,7 @@ class Dialog extends StatelessWidget {
         RaisedButton(
           color: Colors.amber,
           textColor: Colors.white,
-          child: Text('OK'),
+          child: Text('閉じる'),
           onPressed: () => Navigator.pop(context),
         ),
       ],
